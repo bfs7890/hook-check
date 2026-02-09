@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hook Check - Does Your Hook Stop the Scroll?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spinner { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .upload-zone:hover { border-color: #10b981; transform: translateY(-2px); }
+        .upload-zone { transition: all 0.3s ease; }
+        .result-pass { color: #10b981; }
+        .result-fail { color: #ef4444; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <div class="container mx-auto px-6 py-12">
+        <div class="max-w-lg mx-auto text-center">
+            
+            <!-- Header -->
+            <div class="mb-12">
+                <h1 class="text-5xl font-black mb-4 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
+                    HOOK CHECK
+                </h1>
+                <p class="text-xl text-gray-300">
+                    Does your hook stop the scroll?
+                </p>
+                <p class="text-sm text-gray-400 mt-2">
+                    Test the first 5 seconds that make or break your track
+                </p>
+            </div>
+
+            <!-- Upload Section -->
+            <div id="uploadSection" class="space-y-6">
+                <input type="file" id="fileInput" accept="audio/*,video/*" class="hidden">
+                <div onclick="document.getElementById('fileInput').click()" 
+                     class="upload-zone w-full h-40 border-2 border-dashed border-gray-600 rounded-xl flex flex-col items-center justify-center gap-4 cursor-pointer bg-gray-800/50">
+                    <div class="text-4xl">🎯</div>
+                    <div>
+                        <div class="text-2xl font-bold mb-1">Upload Your Track</div>
+                        <div class="text-sm text-gray-400">Audio or video • We analyze first 5 seconds</div>
+                    </div>
+                </div>
+                
+                <div id="testInfo" class="text-xs text-gray-500">
+                    <p>✓ First test free • ✓ Instant results • ✓ One-line fix</p>
+                </div>
+                
+                <div id="warningText" class="hidden bg-amber-900/30 border border-amber-600 rounded-lg p-3">
+                    <p class="text-amber-300 text-sm font-medium">
+                        🔒 Subscribe for unlimited tests - £9.97/month
+                    </p>
+                </div>
+            </div>
+
+            <!-- Processing Section -->
+            <div id="processingSection" class="hidden space-y-8">
+                <div class="flex flex-col items-center">
+                    <div class="w-20 h-20 border-4 border-green-500 border-t-transparent rounded-full spinner mb-6"></div>
+                    <div class="space-y-2">
+                        <p class="text-2xl font-bold">ANALYZING HOOK...</p>
+                        <p class="text-sm text-gray-400">Checking energy, timing, and scroll-stop power</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="resultsSection" class="hidden space-y-8">
+                <div class="bg-gray-800 rounded-2xl p-8 border border-gray-700">
+                    <div id="verdict" class="text-7xl font-black mb-6"></div>
+                    <div id="fixMessage" class="text-lg text-gray-300 mb-6 leading-relaxed"></div>
+                    
+                    <button onclick="runNewTest()" 
+                            class="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105">
+                        🔄 Test Another Track
+                    </button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="mt-16 text-center">
+                <p class="text-xs text-gray-500">
+                    Built for music creators who want to stop the scroll
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testCount = 0;
+        
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            // Check test limit
+            if (testCount >= 1) {
+                alert('🔒 Upgrade to Premium\n\nGet unlimited hook testing for just £9.97/month\n\n✓ Unlimited tests\n✓ Advanced analysis\n✓ Export reports');
+                return;
+            }
+            
+            startAnalysis();
+        });
+        
+        function startAnalysis() {
+            // Hide upload, show processing
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('processingSection').classList.remove('hidden');
+            
+            // Simulate analysis (2-4 seconds)
+            const analysisTime = Math.random() * 2000 + 2000;
+            
+            setTimeout(() => {
+                showResults();
+            }, analysisTime);
+        }
+        
+        function showResults() {
+            // Generate result (60% pass rate for demo)
+            const isPass = Math.random() > 0.4;
+            
+            // Set verdict
+            const verdictEl = document.getElementById('verdict');
+            verdictEl.textContent = isPass ? 'PASS' : 'FAIL';
+            verdictEl.className = `text-7xl font-black mb-6 ${isPass ? 'result-pass' : 'result-fail'}`;
+            
+            // Set fix message
+            const passFixes = [
+                'Strong hook detected. Keep this energy throughout.',
+                'Excellent opening. Your hook has scroll-stopping power.',
+                'Solid start. This will grab attention immediately.'
+            ];
+            
+            const failFixes = [
+                'Cut the intro. Start with your strongest element immediately.',
+                'Boost the lead vocal or main instrument in the mix.',
+                'Remove dead air. Every millisecond counts in the first 5 seconds.',
+                'Brighten the mix for phone speakers and earbuds.',
+                'Increase energy. Hook needs more punch to stop scrolling.',
+                'Lead with rhythm. Get the beat hitting within 2 seconds.',
+                'Tighten arrangement. Remove any empty space at the start.'
+            ];
+            
+            const fixes = isPass ? passFixes : failFixes;
+            document.getElementById('fixMessage').textContent = fixes[Math.floor(Math.random() * fixes.length)];
+            
+            // Show results, hide processing
+            document.getElementById('processingSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            // Update test count and show warning
+            testCount++;
+            if (testCount >= 1) {
+                document.getElementById('warningText').classList.remove('hidden');
+            }
+        }
+        
+        function runNewTest() {
+            // Reset to upload state
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('uploadSection').classList.remove('hidden');
+            document.getElementById('fileInput').value = '';
+        }
+        
+        // Prevent default drag/drop behavior
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    </script>
+</body>
+</html>
